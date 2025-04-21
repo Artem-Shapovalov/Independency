@@ -1,0 +1,12 @@
+{
+    "key": "independency",
+    "name": "Independency",
+    "authors": [ "Artem Shapovalov" ],
+    "maintainers": [ "Artem Shapovalov <artem.shapovalov -at- aol.com" ],
+    "description": "Lightweight and fast implementation of message bus for every project.",
+    "category": [
+        "Patterns and Idioms",
+        "Miscellaneous"
+    ],
+    "cxxstd": "98"
+}
