@@ -215,7 +215,7 @@ int main(int argc, char** argv)
     rpm_indicator rpm;
     fuel_indicator fuel;
 
-    // Here we connecte all of them to the system bus.
+    // Here we connect all of them to the system bus.
     bus.reg(bm);
     bus.reg(speedometer);
     bus.reg(rpm);
