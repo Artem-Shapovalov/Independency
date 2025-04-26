@@ -1,4 +1,5 @@
 <img src="doc/html/logo.svg" width="300">
+
 # Boost.Independency
 
 This library provides a ready to use implementation for the
@@ -9,4 +10,4 @@ binary. This approach turns your code from the huge mess of
 chaotic dependencies to the well-structured code that easy to
 maintain and append.
 
-<img src="doc/html/the_problem.png>
+<img src="doc/html/the_problem.png">
