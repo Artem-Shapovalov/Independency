@@ -1,4 +1,4 @@
-/* @Copyright Artem Shapovalov 2025-2025
+/* © Copyright Artem Shapovalov 2025
  * Distrubutes under the:
  *
  * Boost Software Licence - Version 1.0 - August 17th, 2003

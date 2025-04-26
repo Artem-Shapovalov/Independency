@@ -1,0 +1,51 @@
+pre {
+    border-right: gray 1pt solid;
+    padding-right: 2pt;
+    border-top: gray 1pt solid;
+    display: block;
+    padding-left: 2pt;
+    padding-bottom: 2pt;
+    border-left: gray 1pt solid;
+    margin-right: 32pt;
+    padding-top: 2pt;
+    border-bottom: gray 1pt solid;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #eeeeee;
+}
+
+table {
+    margin-top: 10pt;
+}
+
+tr {
+    border: black 1pt solid;
+    text-align: left;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+th {
+    border: black 1pt solid;
+}
+
+.keyword {
+    color: #0000ff;
+}
+
+.comment {
+    font-style: italic;
+    color: #008000;
+}
+
+.special {
+    color: #3f007f;
+}
+
+.string {
+    font-style: italic;
+    color: #666666;
+}
+
+.literal {
+    font-style: italic;
+    color: #666666;
+}

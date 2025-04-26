@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Boost.Independency Documentation</title>
+        <link rel="stylesheet" href="style.css" type="text/css">
+    </head>
+
+    <body>
+        <table>
+            <tr>
+                <td><img src="logo.svg"></td>
+                <td><h1>Independency library</h1></td>
+            </tr>
+        </table>
+
+        <p>Copyright © 2025 Artem Shapovalov</p>
+        <p>Use, modifications and distribution is subject to the Boost Software Licence, Version 1.0 (see <a href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt)</a></p>
+
+        <h3>Table of Contents</h3>
+        <ul>
+            <li><a href="#intro">Introduction</a></li>
+            <li><a href="#operating">How it works</a></li>
+            <li><a href="#example">Example</a></li>
+        </ul>
+
+        <h2><a name="intro">Introduction</a></h2>
+
+        <p>
+            This library provides a ready to use implementation for the
+            message bus pattern, you may also know it as Publish-Subscribe.
+            Frequently, this approach utilized in large projects with lots
+            servers and clients, but it also quite useful inside the single
+            binary. This approach turns your code from the huge mess of
+            chaotic dependencies to the well-structured code that easy to
+            maintain and append.
+        </p>
+
+        <img src="the_problem.png">
+
+        <p>
+            The key features:
+            <ul>
+                <li>Header-only</li>
+                <li>ANSI C++ compliant</li>
+                <li>Do not use dynamic memory</li>
+                <li>Fast, because there is no serialization and deserialization</li>
+                <li>Simple in use</li>
+                <li>Do not throw exceptions</li>
+                <li>May be used even on embedded systems with uclibc</li>
+                <li>The simplest way to made your software modular</li>
+                <li>Loose coupling</li>
+                <li>Increase scalability</li>
+                <li>Ease implementing other useful patterns</li>
+            </ul>
+        </p>
+
+        <p>
+            Limitations:
+            <ul>
+                <li>May be used for communication in the same binary only</li>
+                <li>Do not work with strings</li>
+                <li>This library do not aware the threads at all</li>
+            </ul>
+        </p>
+
+        <h2><a name="operating">How it works</a></h2>
+
+        <p>
+            Message bus is just a mechanism to propagate information through
+            your program. Basically you register abonents of this bus and
+            then send messages. Message deliver to each subscriber in order
+            they're registered on the bus. Subscriber extracts the necessary
+            data from this message and doing the stuff. Sending message is
+            the blocking operation: the publisher would be blocked until all
+            of the subscribers finish their job.
+        </p>
+
+        <img src="handling.png">
+
+        <p>
+            The message itself is just a set of key-value pairs. Key is
+            the data identifier, in other words just a number that describes
+            what data is stored in the pair. Available data types:
+            <ul>
+                <li>void*, universal pointer</li>
+                <li>const char*, string literal</li>
+                <li>char</li>
+                <li>unsigned char</li>
+                <li>short</li>
+                <li>unsigned short</li>
+                <li>int</li>
+                <li>unsigned int</li>
+                <li>long</li>
+                <li>unsigned long</li>
+                <li>float</li>
+                <li>double</li>
+            </ul>
+        </p>
+
+        <h2><a name="example">Example</a></h2>
+
+        <p>
+            The reference <a href="../../example/demo.cpp">example</a> provides
+            the most efficient way to use this library.
+        </p>
+
+        <p>
+            First step: identify the data exchange model. Here just using the
+            standard macro definitions you may easily describe the message
+            format. Nice to make it in the separate file. In this exaple I'm
+            emulating the dashboard behavior and we have two messages, that
+            translated through the bus:
+        </p>
+
+        <table>
+            <tr>
+                <th>Key</th>
+                <th>Value description</th>
+            </tr>
+            <tr>
+                <th>1</th>
+                <th>Event type, integer: EVENT_SYSTEM</th>
+            </tr>
+            <tr>
+                <th>2</th>
+                <th>
+                    Event enum, integer: SYSTEM_INIT, SPEED_INDICATOR_INITED,
+                    RPM_INDICATOR_INITED, FUEL_INDICATOR_INITED
+                </th>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <th>Key</th>
+                <th>Value description</th>
+            </tr>
+            <tr>
+                <th>1</th>
+                <th>Event type, integer: EVENT_DATA_RECEIVED</th>
+            </tr>
+            <tr>
+                <th>2</th>
+                <th>SPEED, float</th>
+            </tr>
+            <tr>
+                <th>3</th>
+                <th>RPM, float</th>
+            </tr>
+            <tr>
+                <th>4</th>
+                <th>FUEL_LEVEL, float</th>
+            </tr>
+        </table>
+
+<pre>
+<span class="special">
+#define EVENT_KEY              <span class="literal">1</span>
+#define EVENT_SYSTEM           <span class="literal">1</span>
+#define EVENT_DATA_RECEIVED    <span class="literal">2</span>
+
+#define INIT_KEY               <span class="literal">2</span>
+#define SYSTEM_INIT            <span class="literal">1</span>
+#define SPEED_INDICATOR_INITED <span class="literal">2</span>
+#define RPM_INDICATOR_INITED   <span class="literal">3</span>
+#define FUEL_INDICATOR_INITED  <span class="literal">4</span>
+
+#define SPEED_KEY              <span class="literal">2</span>
+#define RPM_KEY                <span class="literal">3</span>
+#define FUEL_LEVEL_KEY         <span class="literal">4</span>
+</span>
+</pre>
+
+        <p>
+            Then implement modules, nice to do it in the separate files.
+            Include the Independency library, then declare the class that
+            inherits the handler.
+        </p>
+
+<pre>
+<span class="special">#include &lt;boost/independency.hpp></span>
+
+<span class="keyword">using</span> namespace boost::independency;
+
+<span class="keyword">class</span> Module : <span class="keyword">public</span> Handler
+{
+    <span class="keyword">public</span>:
+    Module() : Handler(reinterpret_cast&lt;Module*>(this), handler) {}
+
+    <span class="keyword">private</span>:
+    <span class="keyword">static</span> <span class="keyword">void</span> handler(<span class="keyword">void</span>* arg, <span class="keyword">const</span> Message& msg)
+    {
+        Module* that = reinterpret_cast&lt;Module*>(arg);
+
+        <span class="comment">// Do all the stuff here</span>
+    }
+}
+</pre>
+
+        <p>
+            After that you may register this module in some common place, I
+            suggest to do this right in the main function. Declare here the
+            objects of Module, the Bus and subscribe all of the modules.
+        </p>
+
+<pre>
+<span class="special">#include &lt;boost/independency.hpp></span>
+<span class="special">#include "Module.hpp"</span>
+
+<span class="keyword">using</span> namespace boost::independency;
+
+<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)
+{
+    Module module1;
+    Module module2;
+    Module module3;
+
+    Bus bus;
+    bus.reg(module1);
+    bus.reg(module2);
+    bus.reg(module3);
+</pre>
+
+        <p>
+            Sending the message is pretty easy. All made to allow you use the
+            temporary objects. The generic message propagation looks like this:
+        </p>
+
+<pre>
+bus.send(Message(Pair(&lt;key>, &lt;value>))
+            .add(Pair(&lt;key>, &lt;value>)));
+</pre>
+
+        <p>
+            The message would automatically destroyed right after ';' as the
+            lifetime of the temporary objects is limited by full expression.
+            Pay attention, value have type and would be good if you specify
+            it explicitly.
+        </p>
+
+        <p>
+            Extracting message is simple too. Handlers receive the Message
+            object reference, that provides next functions:
+            <ul>
+                <li>get_void_pointer</li>
+                <li>get_string</li>
+                <li>get_char</li>
+                <li>get_unsigned_char</li>
+                <li>get_short</li>
+                <li>get_unsigned_short</li>
+                <li>get_int</li>
+                <li>get_unsigned_int</li>
+                <li>get_long</li>
+                <li>get_unsigned_long</li>
+                <li>get_float</li>
+                <li>get_double</li>
+            </ul>
+            <span style="font-weight:bold">WARNING:</span> all of these
+            functions check types and existance of the key in the message and
+            if something went wrong, they just return 0, or null pointer.
+            Yes, 0 is valuable too, but in my practice it's not a problem if
+            you designed the data exchange propely. Example form the demo:
+        </p>
+
+<pre>
+<span class="keyword">if</span> (msg.get_int(EVENT_KEY) == EVENT_DATA_RECEIVED)
+{
+    that->print_fuel(msg.get_float(FUEL_LEVEL_KEY));
+}
+</pre>
+
+    </body>
+</html>
