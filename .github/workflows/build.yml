@@ -16,3 +16,7 @@ jobs:
         run: |
           cd example
           b2
+
+      - name: Run example
+        run: |
+          $(find -name "independency_demo")

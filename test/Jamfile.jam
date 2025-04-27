@@ -25,4 +25,4 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-exe test : test.cpp : <cxxflags>-I../include ;
+exe independency_test : test.cpp : <include>../include ;
