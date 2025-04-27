@@ -2,6 +2,8 @@
 
 # Boost.Independency
 
+[![Boost.Independency build](https://github.com/Artem-Shapovalov/Independency/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Artem-Shapovalov/Independency/actions/workflows/build.yml)
+
 This library provides a ready to use implementation for the
 message bus pattern, you may also know it as Publish-Subscribe.
 Frequently, this approach utilized in large projects with lots
