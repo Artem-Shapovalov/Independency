@@ -1,6 +1,6 @@
 name: Boost.Independency test
 on: [push]
-jobs"
+jobs:
   boost-independency-test-build-and-run:
     runs-on: ubuntu-latest
     steps:
