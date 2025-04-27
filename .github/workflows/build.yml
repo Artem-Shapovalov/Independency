@@ -1,0 +1,6 @@
+name: Boost.Independency build
+on: [push]
+jobs:
+  boost-independency-example-build:
+    steps:
+      - run: cd example && b2
