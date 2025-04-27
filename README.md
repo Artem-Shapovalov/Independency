@@ -1,9 +1,8 @@
 <img src="doc/html/logo.svg" width="300">
 
 # Boost.Independency
-
+[![License](https://img.shields.io/badge/License-Boost_1.0-lightblue.svg)](https://www.boost.org/LICENSE_1_0.txt)
 [![Boost.Independency build](https://github.com/Artem-Shapovalov/Independency/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Artem-Shapovalov/Independency/actions/workflows/build.yml)
-
 [![Boost.Independency test](https://github.com/Artem-Shapovalov/Independency/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/Artem-Shapovalov/Independency/actions/workflows/test.yml)
 
 This library provides a ready to use implementation for the
