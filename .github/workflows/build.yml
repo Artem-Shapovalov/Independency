@@ -13,6 +13,6 @@ jobs:
           sudo apt-get install libboost-tools-dev
       
       - name: Build example
-         run: |
-           cd example
-           b2
+        run: |
+          cd example
+          b2
